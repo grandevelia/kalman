@@ -56,7 +56,7 @@ for process_noise_q in [0.1, 1.0, 5.0]:
         ax = axes[i]
         
         kalman = Kalman(error_covar_pk, process_noise_q, measurement_noise_r, x_prev)
-        smoothed_data = [(kalman(measurement_data[i]), kalman.gain, kalman.error_covar_pk) for i in range(n)]
+        smoothed_data = [(kalman(measurement_data[i]), kalman.gain, kalman.error_covar_pk) for j in range(n)]
         
         stdev = np.sqrt([x[2] for x in smoothed_data])
         kalman_gain = [x[1] for x in smoothed_data]
