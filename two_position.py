@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils import get_cov_ellipse
 
 control_input_u = 0
 x_prev = 0
@@ -30,7 +29,7 @@ class Kalman:
         self.gain = gain
         
         innovation = measurement_zk - self.H @ self.pred_x
-        self.x_prev = self.x_pred + gain @ (innovation)
+        self.x_prev = self.pred_x + gain @ (innovation)
         self.error_covar_pk = (np.eye(1) - gain @ self.H) @ self.pred_error_covar_pk
     
     def __call__(self, measurement_zk):
@@ -74,7 +73,6 @@ for process_noise_q in [0.1, 1.0, 5.0]:
             estimate = kalman(data)
             smoothed_data_list.append((estimate.copy(), kalman.gain.copy(), kalman.error_covar_pk.copy()))
         
-        # Unpack the list
         stdev = np.sqrt([x[2] for x in smoothed_data_list]).squeeze()
         kalman_gain_1 = [x[1][0][0] for x in smoothed_data_list]
         kalman_gain_2 = [x[1][0][1] for x in smoothed_data_list]
